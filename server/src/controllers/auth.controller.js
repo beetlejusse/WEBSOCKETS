@@ -3,18 +3,15 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.lib.js";
 
 export const signUpController = async (req, res) => {
-  const { email, fullName, password } = req.body;
+  const { email, fullName, password, contactNumber } = req.body;
   try {
-    if (!email || !fullName || !password) {
+    if (!email || !fullName || !password || !contactNumber) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters" });
-    }
+    if (password.length < 6) return res.status(400).json({ message: "Password must be at least 6 characters" });
+    if (contactNumber.length < 6) return res.status(400).json({ message: "Contact Number must be atleast 10 characters" });
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email, contactNumber });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
     const salt = await bcrypt.genSalt(10);
@@ -23,6 +20,7 @@ export const signUpController = async (req, res) => {
     const newUser = new User({
       email,
       fullName,
+      contactNumber,
       password: hashPass,
     });
 
@@ -34,6 +32,7 @@ export const signUpController = async (req, res) => {
       res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
+        contactNumber: newUser.contactNumber,
         email: newUser.email,
         profilePicture: newUser.profilePicture,
         message: "User created successfully",
@@ -48,8 +47,7 @@ export const signUpController = async (req, res) => {
 };
 
 export const loginController = (req, res) => {
-  res.send("login");
-  console.log("working");
+  const { email, password } = req.body;
 };
 
 export const logoutController = (req, res) => {

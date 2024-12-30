@@ -13,6 +13,14 @@ const userSchema = new Schema(
             required: true,
             index: true,
         },
+        contactNumber: {
+            type: String,
+            default: "",
+            unique: true,
+            index: true,
+            required: [true, "Contact Number is Required"],
+            minlength: [10, "Contact Number must be atleast 10 characters"],
+        },
         password: {
             type: String,
             required: [true, "Password is Required"],
