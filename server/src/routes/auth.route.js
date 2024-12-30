@@ -6,7 +6,9 @@ const router = Router();
 router.post("/signup", signUpController);
 
 router.post("/login", loginController);
+// router.post("/send-otp", sendOTPController)
 
 router.post("/logout", logoutController);
+
 
 export default router;
