@@ -1,6 +1,7 @@
 import User from "../models/users.schema.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.lib.js";
+import cloudinary from "../lib/cloudinary.js";
 // import otpGenerator from "otp-generator";
 // import twilio from "twilio";
 
@@ -138,3 +139,30 @@ export const logoutController = (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const updateProfileController = async (req, res) => {
+  try {
+    const {profilePicture} = req.body;
+    const userId = req.user._id;
+
+    if(!profilePicture) return res.status(400).json({message: "Profile Picture is required"});
+
+    const uploadResponse = await cloudinary.uploader.upload(profilePicture);
+    const updatedUser = await User.findbyIdAndUpdate(userId, {profilePicture: uploadResponse.secure_url}, {new: true});
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log("Error in update profile controller: ", error);
+    res.status(500).json({message: "Internal Server Error(at updateProfileController)"});
+  }
+}
+
+export const checkAuthController = async(req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    console.log("Error in check auth controller: ", error);
+    res.status(500).json({message: "Internal Server Error(at checkAuthController)"});
+  }
+}
