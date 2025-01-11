@@ -1,3 +1,6 @@
+import User from "../models/users.schema.js";
+import jwt from "jsonwebtoken";
+
 export const protectedRouteMiddleware = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
