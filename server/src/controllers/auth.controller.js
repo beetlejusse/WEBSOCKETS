@@ -155,14 +155,13 @@ export const updateProfileController = async (req, res) => {
     console.log("Error in update profile controller: ", error);
     res.status(500).json({message: "Internal Server Error(at updateProfileController)"});
   }
-}
+};
 
-export const checkAuthController = async(req, res) => {
+export const checkAuthController = (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select("-password");
-    res.status(200).json(user);
+    res.status(200).json(req.user);
   } catch (error) {
-    console.log("Error in check auth controller: ", error);
-    res.status(500).json({message: "Internal Server Error(at checkAuthController)"});
+    console.log("Error in checkAuth controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};
