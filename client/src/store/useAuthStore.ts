@@ -3,11 +3,11 @@ import { axiosInstance } from "@/lib/axios";
 import { create } from "zustand";
 
 interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
+  profilePicture?: string;
+  fullName?: string;
+  email?: string;
+  createdAt?: string;
 }
-
 interface AuthStore {
   authUser: AuthUser | null;
   isCheckingAuth: boolean;
@@ -19,6 +19,7 @@ interface AuthStore {
   signUp: (data: { fullName: string; email: string; password: string; contactNumber: string }) => void;
   logout: () => void;
   login: (data: { email: string; password: string; contactNumber: string }) => void;
+  updateProfile: (data: { profilePicture: string }) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -29,11 +30,13 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isUpdatingProfile: false,
 
   checkAuth: async () => {
+    set({ isCheckingAuth: true });
     try {
       const res = await axiosInstance.get("/auth/checkAuth");
+      console.log(res);
       set({ authUser: res.data });
     } catch (error: any) {
-      console.error("Error in checkAuth:", error.message || error);
+      console.log("Error in checkAuth:", error.message || error);
     } finally {
       set({ isCheckingAuth: false });
     }
@@ -75,6 +78,20 @@ export const useAuthStore = create<AuthStore>((set) => ({
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "An error occurred during login.";
       toast({ variant: "destructive", title: errorMessage });
+    }
+  },
+
+  updateProfile: async (data) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const res = await axiosInstance.put("/auth/update-profile", data);
+      set({ authUser: res.data });
+      toast({ title: "Profile updated successfully" });
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "An error occurred during profile update.";
+      toast({ variant: "destructive", title: errorMessage });
+    } finally {
+      set({ isUpdatingProfile: false });
     }
   }
 }));
