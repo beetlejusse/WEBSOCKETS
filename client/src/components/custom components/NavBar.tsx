@@ -7,13 +7,16 @@ const Navbar = () => {
 
   return (
     <header
-      className="bg-gradient-to-r from-blue-600 to-purple-600 border-b border-blue-700 fixed w-full top-0 z-40 
+      className=" fixed w-full top-0 z-40 
     backdrop-blur-lg backdrop-filter bg-opacity-95 shadow-lg"
     >
       <div className="container mx-auto px-4 h-16">
         <div className="flex items-center justify-between h-full">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-all">
+            <Link
+              to="/"
+              className="flex items-center gap-2.5 hover:opacity-80 transition-all"
+            >
               <div className="size-9 rounded-lg bg-white/20 flex items-center justify-center">
                 <MessageSquare className="w-5 h-5 text-white" />
               </div>
@@ -37,33 +40,14 @@ const Navbar = () => {
             {authUser ? (
               <>
                 <div className="relative group">
-                  <button
-                    className="btn btn-sm btn-accent gap-2 transition-transform transform hover:scale-105"
-                    title="View Profile"
-                  >
-                    <User className="w-4 h-4" />
-                    <span className="hidden sm:inline">Profile</span>
-                  </button>
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <ul className="py-2 text-gray-700">
-                      <li>
-                        <Link
-                          to={"/profile"}
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          View Profile
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to={"/settings"}
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          Settings
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
+                  <Link to={"/inspectProfile"} className="hidden sm:inline">
+                    <button
+                      className="btn btn-sm btn-accent gap-2 transition-transform transform hover:scale-105"
+                      title="View Profile"
+                    >
+                      <User className="w-4 h-4" /> Profile
+                    </button>
+                  </Link>
                 </div>
                 <button
                   className="btn btn-sm btn-error gap-2 transition-transform transform hover:scale-105"
