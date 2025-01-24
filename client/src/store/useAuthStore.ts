@@ -7,6 +7,7 @@ interface AuthUser {
   fullName?: string;
   email?: string;
   createdAt?: string;
+  userId: string;
 }
 interface AuthStore {
   authUser: AuthUser | null;
@@ -14,6 +15,8 @@ interface AuthStore {
   isSigningUp: boolean;
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
+  onlineUsers: string[];
+  
 
   checkAuth: () => void;
   signUp: (data: { fullName: string; email: string; password: string; contactNumber: string }) => void;
@@ -28,6 +31,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
+  onlineUsers: [],
 
   checkAuth: async () => {
     set({ isCheckingAuth: true });
